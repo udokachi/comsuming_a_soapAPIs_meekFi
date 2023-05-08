@@ -1,4 +1,6 @@
 import apiClient from "../api/Api.js";
+import {parseString} from 'xml2js';
+import axios from "axios";
 
 
 //get all countries 
@@ -27,36 +29,39 @@ export const getAllCountry = async (req, res) => {
 }
 
 
-//  get each country's capital
 export const getCountryCapital = async (req, res) => {
-
+    const { sCountryISOCode } = req.body; // Call the CapitalCity SOAP API using axios 
     try {
-        const { sCountryISOCode } = req.body
-        const headers = {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        };
-        const response = await apiClient.post('/CapitalCity', { sCountryISOCode }, headers)
-
-
-        let data = {
-            capital: response.data
-        };
-
-        return res.status(200).json({
-            message: 'Country capital Retrived Successfully',
-            data
+        const response = await axios.post(
+            'http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso',
+            ` 
+                <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:web="http://www.oorsprong.org/websamples.countryinfo"> 
+                    <soapenv:Header/> 
+                    <soapenv:Body> 
+                        <web:CapitalCity> 
+                            <web:sCountryISOCode>${sCountryISOCode}</web:sCountryISOCode> 
+                        </web:CapitalCity> 
+                    </soapenv:Body> 
+                </soapenv:Envelope> 
+            `, {
+            headers: { 'Content-Type': 'text/xml' }
+        }
+        ); // Extract the capital city from the SOAP response 
+        const xmlResponse = response.data;
+        parseString(xmlResponse, function (err, result) {
+            if (err) {
+                console.error(err); res.status(500).json({ error: 'Internal server error' });
+            } else {
+                const capital = result['soap:Envelope']['soap:Body'][0]['m:CapitalCityResponse'][0]['m:CapitalCityResult'][0];
+                res.status(200).json({ capital });
+            }
         });
-
-
     } catch (error) {
-        console.error(error)
-        res.status(404).json({
-            Error: 'Country not found'
-        })
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
     }
-}
+};
+
 
 
 //  get each country's currency
