@@ -7,19 +7,15 @@ import axios from "axios";
 const url = `http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso`;
 
 //get all countries 
- export const getAllCountryByName = async(req, res)=> {
+ export const getAllCountry = async(req, res)=> {
     try {
       const headers = {
         headers: {
           "Content-Type": "application/json",
         },
       };
-  
-      let args = Formatter.countryByName();
-      let remoteResponse = await apiClient.post('/ListOfCountryNamesByName', args, headers)
+      let remoteResponse = await apiClient.post('/ListOfCountryNamesByName', headers)
       let result = remoteResponse.data
-      // let remoteResponse = await axios.post(url, args, headers);
-      // console.log(result)
       return res.status(201).json({
         message: 'list of country',
         result,
@@ -36,8 +32,41 @@ const url = `http://webservices.oorsprong.org/websamples.countryinfo/CountryInfo
     }
   }
   
-  export default 
-    getAllCountryByName
-  ;
+ 
+export const getCountryCapital = async (req, res) => {
+
+    try {
+        const {sCountryISOCode} = req.body
+        const headers = {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          };
+        const response = await apiClient.post('/CapitalCity', {sCountryISOCode}, headers)
+
+
+        let data = {
+            capital: response.data
+          };
+          
+          return res.status(200).json({
+            message: 'Country capital',
+            data
+          });
+
+       
+    } catch (error) {
+        console.error(error)
+        console.log(console.log(">>>>>>>>>>>>>>>>>", error.message))
+        res.status(404).json({
+            Error: 'Country not found'
+        })
+    }
+}
+
+
+  export default getAllCountry;
   
 
+
+  

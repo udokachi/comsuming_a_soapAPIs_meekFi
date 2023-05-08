@@ -15,12 +15,4 @@ export default class Parser {
   }
 };
 
-// export function parseJSONBodyToXML(jsonArgument) {
-//   return jsonxml(jsonArgument, { html: true });
-// }
-
-// export async function convertXMLToJSON(xmlMessage) {
-//   const options = { trim: true, explicitArray: false, explicitRoot: false };
-//   return promisfiedParseString(xmlMessage, options);
-// }
 
