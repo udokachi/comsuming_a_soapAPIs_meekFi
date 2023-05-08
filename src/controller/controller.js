@@ -32,6 +32,7 @@ const url = `http://webservices.oorsprong.org/websamples.countryinfo/CountryInfo
     }
   }
   
+
  
 export const getCountryCapital = async (req, res) => {
 
@@ -65,6 +66,35 @@ export const getCountryCapital = async (req, res) => {
 }
 
 
+export const getCountryCurrency = async (req, res) => {
+
+    try {
+        const {sCountryISOCode} = req.body
+        const headers = {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          };
+        const response = await apiClient.post('/CountryCurrency', {sCountryISOCode}, headers)
+
+
+        let data = {
+            capital: response.data
+          };
+          
+          return res.status(200).json({
+            message: 'Country Currency',
+            data
+          });
+
+       
+    } catch (error) {
+        console.error(error)
+        res.status(404).json({
+            Error: 'Country not found'
+        })
+    }
+}
   export default getAllCountry;
   
 
