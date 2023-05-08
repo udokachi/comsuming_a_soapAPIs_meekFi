@@ -95,6 +95,37 @@ export const getCountryCurrency = async (req, res) => {
         })
     }
 }
+
+
+export const getCountryFlag = async (req, res) => {
+
+    try {
+        const {sCountryISOCode} = req.body
+        const headers = {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          };
+        const response = await apiClient.post('/CountryFlag', {sCountryISOCode}, headers)
+
+
+        let data = {
+            capital: response.data
+          };
+          
+          return res.status(200).json({
+            message: 'Country Flag',
+            data
+          });
+
+       
+    } catch (error) {
+        console.error(error)
+        res.status(404).json({
+            Error: 'Country not found'
+        })
+    }
+}
   export default getAllCountry;
   
 
