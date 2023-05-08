@@ -2,7 +2,7 @@ import express from "express"
 import morgan from "morgan"
 import cors from "cors"
 import helmet from "helmet"
-// import v1 from "./v1/v1.js"
+import countryRoutes from "./src/routes/countryRoutes.js"
 
 
 const createServer = () => {
@@ -11,8 +11,8 @@ const createServer = () => {
     app.use(express.json())
         .use(cors())
         .use(morgan('tiny'))
-        .use(helmet());
-        // .use("/api", routes);
+        .use(helmet())
+        .use("/api", countryRoutes);
 
 
     return app
