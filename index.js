@@ -1,15 +1,13 @@
 
-import connectDB from "./src/database/databaseConnection.js"
-import createServer from "./app.js"
+import createServer from "./app.js";
 
 import dotenv from 'dotenv'
-dotenv.config()
+dotenv.config();
 
-const Port = process.env.PORT || 4000
-connectDB()
+const Port = process.env.PORT || 4000;
 
-const app = createServer()
+const app = createServer();
 
 app.listen(Port, () => {
     console.log(`Server running at http://localhost:${Port}`)
-})
+});
