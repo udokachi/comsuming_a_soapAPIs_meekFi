@@ -11,3 +11,7 @@ const app = createServer();
 app.listen(Port, () => {
     console.log(`Server running at http://localhost:${Port}`)
 });
+
+app.get('/', (req, res)=>{
+    res.send('welcome to soap service')
+})
